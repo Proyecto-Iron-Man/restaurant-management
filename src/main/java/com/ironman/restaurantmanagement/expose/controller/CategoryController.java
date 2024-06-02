@@ -1,8 +1,8 @@
 package com.ironman.restaurantmanagement.expose.controller;
 
 
+import com.ironman.restaurantmanagement.application.service.CategoryService;
 import com.ironman.restaurantmanagement.presistence.entity.Category;
-import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,26 +14,20 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public List<Category> findAll() {
-
-        List<Category> categories = (List<Category>) categoryRepository.findAll();
-
-        return categories;
+        return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
     public Category findById( @PathVariable("id") Long id) {
-
-        Category category = categoryRepository.findById(id).orElse(null);
-
-        return category;
+        return categoryService.findById(id);
     }
 
 

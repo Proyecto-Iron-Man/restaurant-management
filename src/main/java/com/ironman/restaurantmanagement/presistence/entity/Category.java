@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 // Lombok annotations
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 // JPA annotations
 @Entity
 @Table(name = "categories")
-public class Category implements java.io.Serializable {
+public class Category implements Serializable {
     // Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
