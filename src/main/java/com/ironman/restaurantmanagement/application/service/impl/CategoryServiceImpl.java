@@ -1,6 +1,8 @@
 package com.ironman.restaurantmanagement.application.service.impl;
 
+import com.ironman.restaurantmanagement.application.dto.category.CategoryBodyDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategoryDto;
+import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySmallDto;
 import com.ironman.restaurantmanagement.application.mapper.CategoryMapper;
 import com.ironman.restaurantmanagement.application.service.CategoryService;
@@ -9,6 +11,7 @@ import com.ironman.restaurantmanagement.presistence.repository.CategoryRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 // Lombok annotations
@@ -47,5 +50,32 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toDto)
                 .orElse(null);
+    }
+
+    @Override
+    public CategorySavedDto create(CategoryBodyDto categoryBody) {
+        Category category = categoryMapper.toEntity(categoryBody);
+        category.setState("A");
+        category.setCreatedAt(LocalDateTime.now());
+
+        return categoryMapper.toSavedDto(categoryRepository.save(category));
+    }
+
+    @Override
+    public CategorySavedDto update(Long id, CategoryBodyDto categoryBody) {
+        Category category = categoryRepository.findById(id).get();
+
+        categoryMapper.updateEntity(category, categoryBody);
+        category.setUpdatedAt(LocalDateTime.now());
+
+        return categoryMapper.toSavedDto(categoryRepository.save(category));
+    }
+
+    @Override
+    public CategorySavedDto disable(Long id) {
+        Category category = categoryRepository.findById(id).get();
+        category.setState("E");
+
+        return categoryMapper.toSavedDto(categoryRepository.save(category));
     }
 }
