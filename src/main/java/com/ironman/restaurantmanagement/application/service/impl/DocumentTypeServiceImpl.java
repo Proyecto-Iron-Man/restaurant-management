@@ -24,7 +24,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 
     @Override
     public List<DocumentTypeSmallDto> findAll() {
-        return ((List<DocumentType>) documentTypeRepository.findAll())
+        return (documentTypeRepository.findAll())
                 .stream()
                 .map(documentTypeMapper::toSmallDto)
                 .toList();
