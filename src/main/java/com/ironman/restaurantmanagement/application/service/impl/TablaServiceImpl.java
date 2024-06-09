@@ -29,7 +29,7 @@ public class TablaServiceImpl implements TablaService {
     public List<TablaSmallDto> findAll() {
         return ((List<Tabla>) tablaRepository.findAll())
                 .stream()
-                .filter(tabla -> !(State.DISABLED.getValue()).equals(tabla.getState()))
+               // .filter(tabla -> !(State.DISABLED.getValue()).equals(tabla.getState()))
                 .map(tablaMapper::toSmallDto)
                 .toList();
     }
