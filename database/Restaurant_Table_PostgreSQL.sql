@@ -130,5 +130,73 @@ create table invoice_details
 );
 
 
--- drop table products;
--- drop table categories;
+-- tables for the practical part of the class
+
+create table tables
+(
+    id serial,
+    name varchar(200) not null,
+    description varchar(1000),
+    state char(1) not null default 'A',
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+
+    constraint tables_pk primary key (id),
+    constraint tables_name_uq unique (name)
+);
+
+
+create table invoice_statements
+(
+    id serial,
+    name varchar(200) not null,
+    description varchar(1000),
+    state char(1) not null default 'A',
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+
+    constraint invoice_statements_pk primary key (id),
+    constraint invoice_statements_name_uq unique (name)
+);
+
+
+create table payment_types
+(
+    id serial,
+    name varchar(200) not null,
+    description varchar(1000),
+    state char(1) not null default 'A',
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+
+    constraint payment_types_pk primary key (id),
+    constraint payment_types_name_uq unique (name)
+);
+
+
+create table order_types
+(
+    id serial,
+    name varchar(200) not null,
+    description varchar(1000),
+    state char(1) not null default 'A',
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+
+    constraint order_types_pk primary key (id),
+    constraint order_types_name_uq unique (name)
+);
+
+
+create table order_status
+(
+    id serial,
+    name varchar(200) not null,
+    description varchar(1000),
+    state char(1) not null default 'A',
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+
+    constraint order_status_pk primary key (id),
+    constraint order_status_name_uq unique (name)
+);
