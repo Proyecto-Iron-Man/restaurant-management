@@ -13,4 +13,5 @@ public interface DocumentTypeService {
     DocumentTypeSavedDto create(DocumentTypeBodyDto documentTypeBodyDto);
     DocumentTypeSavedDto update(Long id, DocumentTypeBodyDto documentTypeBodyDto);
     DocumentTypeSavedDto disable(Long id);
+    List<DocumentTypeSmallDto> findByStateOrderByIdDesc(String state);
 }

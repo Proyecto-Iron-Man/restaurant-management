@@ -40,4 +40,9 @@ public class DocumentTypeController {
     public DocumentTypeSavedDto disable(@PathVariable("id") Long id) {
         return documentTypeService.disable(id);
     }
+
+    @GetMapping("/state/{state}")
+    public List<DocumentTypeSmallDto> findByStateOrderByIdDesc(@PathVariable("state") String state) {
+        return documentTypeService.findByStateOrderByIdDesc(state);
+    }
 }

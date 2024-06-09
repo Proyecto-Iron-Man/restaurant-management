@@ -59,4 +59,12 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
         documentType.setState(State.DISABLED.getValue());
         return documentTypeMapper.toSavedDto(documentTypeRepository.save(documentType));
     }
+
+    @Override
+    public List<DocumentTypeSmallDto> findByStateOrderByIdDesc(String state) {
+        return documentTypeRepository.findByStateOrderByIdDesc(state)
+                .stream()
+                .map(documentTypeMapper::toSmallDto)
+                .toList();
+    }
 }
