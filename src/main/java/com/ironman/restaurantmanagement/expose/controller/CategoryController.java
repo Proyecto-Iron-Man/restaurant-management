@@ -37,6 +37,12 @@ public class CategoryController {
         return categoryService.findByState(state);
     }
 
+    @GetMapping("/name/{name}")
+    public List<CategorySmallDto> findByName(@PathVariable("name") String name) {
+        return categoryService.findByName(name);
+    }
+
+
 
     @PostMapping
     public CategorySavedDto create(@RequestBody CategoryBodyDto categoryBody) {
