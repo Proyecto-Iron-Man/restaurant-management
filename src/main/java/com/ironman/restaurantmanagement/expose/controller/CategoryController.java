@@ -6,6 +6,7 @@ import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDt
 import com.ironman.restaurantmanagement.application.dto.category.CategorySmallDto;
 import com.ironman.restaurantmanagement.application.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
+
 
     private final CategoryService categoryService;
 

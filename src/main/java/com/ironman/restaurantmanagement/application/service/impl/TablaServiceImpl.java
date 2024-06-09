@@ -4,33 +4,67 @@ import com.ironman.restaurantmanagement.application.dto.tabla.TablaBodyDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSaveDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSmallDto;
+import com.ironman.restaurantmanagement.application.mapper.TablaMapper;
 import com.ironman.restaurantmanagement.application.service.TablaService;
+import com.ironman.restaurantmanagement.presistence.entity.Tabla;
+import com.ironman.restaurantmanagement.presistence.repository.TablaRepository;
+import com.ironman.restaurantmanagement.shared.state.enums.State;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+//Lombok annotations
+@RequiredArgsConstructor
+
+// Spring Stereotype annotations
+@Service
 public class TablaServiceImpl implements TablaService {
+
+    private final TablaRepository tablaRepository;
+    private final TablaMapper tablaMapper;
+
     @Override
     public List<TablaSmallDto> findAll() {
-        return List.of();
+        return ((List<Tabla>) tablaRepository.findAll())
+                .stream()
+                .filter(tabla -> !(State.DISABLED.getValue()).equals(tabla.getState()))
+                .map(tablaMapper::toSmallDto)
+                .toList();
     }
 
     @Override
     public TablaDto findById(Long id) {
-        return null;
+        return tablaRepository.findById(id)
+                .map(tablaMapper::toDto)
+                .orElse(null);
     }
 
     @Override
     public TablaSaveDto create(TablaBodyDto tablaBodyDto) {
-        return null;
+        Tabla tabla = tablaMapper.entity(tablaBodyDto);
+        tabla.setState(State.ENABLED.getValue());
+        tabla.setCreatedAt(LocalDateTime.now());
+
+        return tablaMapper.toSaveDto(tablaRepository.save(tabla));
     }
 
     @Override
     public TablaSaveDto update(Long id, TablaBodyDto tablaBodyDto) {
-        return null;
+           Tabla tabla = tablaRepository.findById(id).get();
+
+           tablaMapper.updateEntity(tabla,tablaBodyDto);
+           tabla.setUpdatedAt(LocalDateTime.now());
+
+        return tablaMapper.toSaveDto(tablaRepository.save(tabla));
     }
 
     @Override
     public TablaSaveDto disable(Long id) {
-        return null;
+        Tabla tabla =tablaRepository.findById(id).get();
+        tabla.setState(State.DISABLED.getValue());
+
+        return tablaMapper.toSaveDto(tablaRepository.save(tabla));
     }
 }

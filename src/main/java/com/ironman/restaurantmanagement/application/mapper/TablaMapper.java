@@ -6,10 +6,11 @@ import com.ironman.restaurantmanagement.application.dto.tabla.TablaSaveDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSmallDto;
 import com.ironman.restaurantmanagement.presistence.entity.Tabla;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
 // MapStruct annotations
-@Mapper(ComponentModel)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TablaMapper {
 
     TablaDto   toDto(Tabla tabla);
