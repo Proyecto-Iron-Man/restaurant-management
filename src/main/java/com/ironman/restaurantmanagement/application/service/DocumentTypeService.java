@@ -15,4 +15,5 @@ public interface DocumentTypeService {
     DocumentTypeSavedDto disable(Long id);
     List<DocumentTypeSmallDto> findByStateOrderByIdDesc(String state);
     List<DocumentTypeSmallDto> findByName(String name);
+    List<DocumentTypeSmallDto> findAllByFilters(String name, String state);
 }

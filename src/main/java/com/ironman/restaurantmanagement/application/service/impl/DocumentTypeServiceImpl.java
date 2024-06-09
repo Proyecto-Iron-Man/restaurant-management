@@ -75,4 +75,12 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
                 .map(documentTypeMapper::toSmallDto)
                 .toList();
     }
+
+    @Override
+    public List<DocumentTypeSmallDto> findAllByFilters(String name, String state) {
+        return documentTypeRepository.findAllByFilters(name, state)
+                .stream()
+                .map(documentTypeMapper::toSmallDto)
+                .toList();
+    }
 }

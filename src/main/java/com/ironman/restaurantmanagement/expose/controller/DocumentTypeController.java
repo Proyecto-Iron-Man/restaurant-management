@@ -50,4 +50,9 @@ public class DocumentTypeController {
     public List<DocumentTypeSmallDto> findByName(@PathVariable("name") String name) {
         return documentTypeService.findByName(name);
     }
+    @GetMapping("/filters")
+    public List<DocumentTypeSmallDto> findAllByFilters(@RequestParam(value = "name", required = false) String name,
+                                                       @RequestParam(value = "state", required = false) String state) {
+        return documentTypeService.findAllByFilters(name, state);
+    }
 }

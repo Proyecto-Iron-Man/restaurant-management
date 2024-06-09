@@ -14,4 +14,9 @@ public interface DocumentTypeRepository extends ListCrudRepository<DocumentType,
     @Query(value = "SELECT dt FROM DocumentType AS dt "+
             "WHERE UPPER(dt.name) LIKE UPPER(CONCAT('%', :name, '%')) ORDER BY dt.id DESC")
     List<DocumentType> findByName(@Param("name") String name);
+
+    @Query(value = "SELECT dt FROM DocumentType AS dt "+
+            "WHERE ( :#{#name} IS NULL OR UPPER(dt.name) LIKE UPPER(CONCAT('%',:name,'%')))  "+
+            "AND ( :#{#state} IS NULL OR dt.state = :state) ORDER BY dt.id DESC")
+    List<DocumentType> findAllByFilters(@Param("name") String name,@Param("state") String state);
 }
