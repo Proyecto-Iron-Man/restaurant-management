@@ -67,4 +67,12 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
                 .map(documentTypeMapper::toSmallDto)
                 .toList();
     }
+
+    @Override
+    public List<DocumentTypeSmallDto> findByName(String name) {
+        return documentTypeRepository.findByName(name)
+                .stream()
+                .map(documentTypeMapper::toSmallDto)
+                .toList();
+    }
 }

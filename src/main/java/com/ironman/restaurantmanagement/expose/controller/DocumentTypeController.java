@@ -45,4 +45,9 @@ public class DocumentTypeController {
     public List<DocumentTypeSmallDto> findByStateOrderByIdDesc(@PathVariable("state") String state) {
         return documentTypeService.findByStateOrderByIdDesc(state);
     }
+
+    @GetMapping("/name/{name}")
+    public List<DocumentTypeSmallDto> findByName(@PathVariable("name") String name) {
+        return documentTypeService.findByName(name);
+    }
 }
