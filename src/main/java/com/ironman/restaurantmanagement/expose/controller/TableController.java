@@ -35,6 +35,12 @@ public class TableController {
         return tablaService.findById(id);
     }
 
+    @Operation(summary = "Mostar las tablas por el estado, desendentemente")
+    @GetMapping("/state/{state}")
+    public List<TablaSmallDto> findByStateOrderByIdDescIgnoreCase(@PathVariable String state) {
+        return tablaService.findByStateIgnoreCaseOrderByIdDesc(state);
+    }
+
     @Operation(summary = "Agregar una tabla")
     @PostMapping
     public TablaSaveDto create(@RequestBody TablaBodyDto tablaBodyDto) {

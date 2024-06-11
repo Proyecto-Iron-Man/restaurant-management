@@ -19,5 +19,6 @@ public interface TablaService {
 
     TablaSaveDto disable(Long id);
 
+    List<TablaSmallDto> findByStateIgnoreCaseOrderByIdDesc(String state);
 
 }

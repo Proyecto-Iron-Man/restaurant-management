@@ -67,4 +67,13 @@ public class TablaServiceImpl implements TablaService {
 
         return tablaMapper.toSaveDto(tablaRepository.save(tabla));
     }
+
+    @Override
+    public List<TablaSmallDto> findByStateIgnoreCaseOrderByIdDesc(String state) {
+        return tablaRepository.findByStateIgnoreCaseOrderByIdDesc(state)
+                .stream()
+                .map(tablaMapper::toSmallDto)
+                .toList();
+
+    }
 }
