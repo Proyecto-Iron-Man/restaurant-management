@@ -85,4 +85,12 @@ public class TablaServiceImpl implements TablaService {
                 .toList();
 
     }
+
+    @Override
+    public List<TablaSmallDto> findAllByFilters(String name, String state) {
+        return tablaRepository.findAllByFilters(name, state)
+                .stream()
+                .map(tablaMapper::toSmallDto)
+                .toList();
+    }
 }

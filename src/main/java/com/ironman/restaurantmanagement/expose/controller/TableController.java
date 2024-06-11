@@ -47,6 +47,13 @@ public class TableController {
         return tablaService.findByName(name);
     }
 
+    @Operation(summary = "Mostar las tablas por los filtros de nombre y estado")
+    @GetMapping("/filters")
+    public List<TablaSmallDto> findAllFilters(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "state", required = false) String state) {
+        return tablaService.findAllByFilters(name, state);
+    }
+
     @Operation(summary = "Agregar una tabla")
     @PostMapping
     public TablaSaveDto create(@RequestBody TablaBodyDto tablaBodyDto) {

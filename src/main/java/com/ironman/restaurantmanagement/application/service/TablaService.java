@@ -23,4 +23,6 @@ public interface TablaService {
 
     List<TablaSmallDto> findByName(String name);
 
+    List<TablaSmallDto> findAllByFilters(String name, String state);
+
 }

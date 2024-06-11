@@ -10,13 +10,19 @@ import java.util.List;
 
 public interface TablaRepository extends ListCrudRepository<Tabla, Long> {
 
-    // JPA Query Methods (Derived Query Methods)
-    List<Tabla> findByStateIgnoreCaseOrderByIdDesc(String state);
+        // JPA Query Methods (Derived Query Methods)
+        List<Tabla> findByStateIgnoreCaseOrderByIdDesc(String state);
 
-    // JPQL, La tabla sera el nombre del entity
-    @Query(value = "SELECT t FROM  Tabla AS t " +
-            "WHERE UPPER(t.name) LIKE UPPER(CONCAT('%', :name ,'%')) " +
-            "ORDER BY t.id DESC")
-    List<Tabla> findByName(@Param("name") String name);
+        // JPQL, La tabla sera el nombre del entity
+        @Query(value = "SELECT t FROM  Tabla AS t " +
+                        "WHERE UPPER(t.name) LIKE UPPER(CONCAT('%', :#{#name} ,'%')) " +
+                        "ORDER BY t.id DESC")
+        List<Tabla> findByName(@Param("name") String name);
+
+        // JPQL Y SPEL
+        @Query(value = "SELECT t FROM Tabla AS t " +
+                        "WHERE (:#{#name} IS NULL OR UPPER(t.name) LIKE UPPER(CONCAT('%', :name ,'%')) )" +
+                        "AND (:#{#state} IS NULL OR UPPER(t.state) = UPPER(:state) )")
+        List<Tabla> findAllByFilters(@Param("name") String name, @Param("state") String state);
 
 }
