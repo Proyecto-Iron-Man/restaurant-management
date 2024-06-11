@@ -76,4 +76,13 @@ public class TablaServiceImpl implements TablaService {
                 .toList();
 
     }
+
+    @Override
+    public List<TablaSmallDto> findByName(String name) {
+        return tablaRepository.findByName(name)
+                .stream()
+                .map(tablaMapper::toSmallDto)
+                .toList();
+
+    }
 }

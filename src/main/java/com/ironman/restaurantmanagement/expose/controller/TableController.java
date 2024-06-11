@@ -41,6 +41,12 @@ public class TableController {
         return tablaService.findByStateIgnoreCaseOrderByIdDesc(state);
     }
 
+    @Operation(summary = "Mostar las tablas por el nombre, desendentemente")
+    @GetMapping("/name/{name}")
+    public List<TablaSmallDto> findByName(@PathVariable("name") String name) {
+        return tablaService.findByName(name);
+    }
+
     @Operation(summary = "Agregar una tabla")
     @PostMapping
     public TablaSaveDto create(@RequestBody TablaBodyDto tablaBodyDto) {

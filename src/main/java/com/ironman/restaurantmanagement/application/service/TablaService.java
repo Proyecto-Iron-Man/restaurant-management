@@ -21,4 +21,6 @@ public interface TablaService {
 
     List<TablaSmallDto> findByStateIgnoreCaseOrderByIdDesc(String state);
 
+    List<TablaSmallDto> findByName(String name);
+
 }
