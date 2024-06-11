@@ -1,7 +1,5 @@
 package com.ironman.restaurantmanagement.expose.controller;
 
-
-import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaBodyDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSaveDto;
