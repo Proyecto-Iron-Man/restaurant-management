@@ -27,9 +27,9 @@ public class TablaServiceImpl implements TablaService {
 
     @Override
     public List<TablaSmallDto> findAll() {
-        return ((List<Tabla>) tablaRepository.findAll())
+        return tablaRepository.findAll()
                 .stream()
-               // .filter(tabla -> !(State.DISABLED.getValue()).equals(tabla.getState()))
+                // .filter(tabla -> !(State.DISABLED.getValue()).equals(tabla.getState()))
                 .map(tablaMapper::toSmallDto)
                 .toList();
     }
@@ -52,17 +52,17 @@ public class TablaServiceImpl implements TablaService {
 
     @Override
     public TablaSaveDto update(Long id, TablaBodyDto tablaBodyDto) {
-           Tabla tabla = tablaRepository.findById(id).get();
+        Tabla tabla = tablaRepository.findById(id).get();
 
-           tablaMapper.updateEntity(tabla,tablaBodyDto);
-           tabla.setUpdatedAt(LocalDateTime.now());
+        tablaMapper.updateEntity(tabla, tablaBodyDto);
+        tabla.setUpdatedAt(LocalDateTime.now());
 
         return tablaMapper.toSaveDto(tablaRepository.save(tabla));
     }
 
     @Override
     public TablaSaveDto disable(Long id) {
-        Tabla tabla =tablaRepository.findById(id).get();
+        Tabla tabla = tablaRepository.findById(id).get();
         tabla.setState(State.DISABLED.getValue());
 
         return tablaMapper.toSaveDto(tablaRepository.save(tabla));
