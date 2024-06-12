@@ -8,6 +8,7 @@ import com.ironman.restaurantmanagement.application.mapper.CategoryMapper;
 import com.ironman.restaurantmanagement.application.service.CategoryService;
 import com.ironman.restaurantmanagement.presistence.entity.Category;
 import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
+import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto findById(Long id) {
+    public CategoryDto findById(Long id) throws DataNotFoundException {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toDto)
-                .orElse(null);
+                .orElseThrow(() -> categoryDataNotFoundException(id));
     }
 
     @Override
@@ -51,8 +52,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategorySavedDto update(Long id, CategoryBodyDto categoryBody) {
-        Category category = categoryRepository.findById(id).get();
+    public CategorySavedDto update(Long id, CategoryBodyDto categoryBody) throws DataNotFoundException {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> categoryDataNotFoundException(id));
 
         categoryMapper.updateEntity(category, categoryBody);
         category.setUpdatedAt(LocalDateTime.now());
@@ -61,8 +63,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategorySavedDto disable(Long id) {
-        Category category = categoryRepository.findById(id).get();
+    public CategorySavedDto disable(Long id) throws DataNotFoundException {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> categoryDataNotFoundException(id));
+
         category.setState(State.DISABLED.getValue());
 
         return categoryMapper.toSavedDto(categoryRepository.save(category));
@@ -90,5 +94,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .map(categoryMapper::toSmallDto)
                 .toList();
+    }
+
+    private DataNotFoundException categoryDataNotFoundException(Long id) {
+        return new DataNotFoundException("Category not found with id: " + id);
     }
 }
