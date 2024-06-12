@@ -28,19 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategorySmallDto> findAll() {
-        /*
-        List<CategorySmallDto> dtos = new ArrayList<>();
-
-        List<Category> categories = (List<Category>) categoryRepository.findAll();
-
-        for (Category category : categories) {
-            dtos.add(categoryMapper.toSmallDto(category));
-        }
-
-        return dtos;
-        */
-
-        return ((List<Category>) categoryRepository.findAll())
+        return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::toSmallDto)
                 .toList();
@@ -78,5 +66,29 @@ public class CategoryServiceImpl implements CategoryService {
         category.setState(State.DISABLED.getValue());
 
         return categoryMapper.toSavedDto(categoryRepository.save(category));
+    }
+
+    @Override
+    public List<CategorySmallDto> findByState(String state) {
+        return categoryRepository.findByStateOrderByIdDesc(state)
+                .stream()
+                .map(categoryMapper::toSmallDto)
+                .toList();
+    }
+
+    @Override
+    public List<CategorySmallDto> findByName(String name) {
+        return categoryRepository.findByName(name)
+                .stream()
+                .map(categoryMapper::toSmallDto)
+                .toList();
+    }
+
+    @Override
+    public List<CategorySmallDto> findAllByFilters(String name, String state) {
+        return categoryRepository.findAllByFilters(name, state)
+                .stream()
+                .map(categoryMapper::toSmallDto)
+                .toList();
     }
 }

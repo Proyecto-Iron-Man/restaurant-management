@@ -17,4 +17,10 @@ public interface CategoryService {
     CategorySavedDto update(Long id, CategoryBodyDto categoryBody);
 
     CategorySavedDto disable(Long id);
+
+    List<CategorySmallDto> findByState(String state);
+
+    List<CategorySmallDto> findByName(String name);
+
+    List<CategorySmallDto> findAllByFilters(String name, String state);
 }
