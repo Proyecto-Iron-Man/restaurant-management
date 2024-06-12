@@ -32,6 +32,23 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
+    @GetMapping("/state/{state}")
+    public List<CategorySmallDto> findByState(@PathVariable("state") String state) {
+        return categoryService.findByState(state);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<CategorySmallDto> findByName(@PathVariable("name") String name) {
+        return categoryService.findByName(name);
+    }
+
+    @GetMapping("/filters")
+    public List<CategorySmallDto> findAllByFilters(@RequestParam(value = "name", required = false) String name,
+                                                   @RequestParam(value = "state", required = false) String state) {
+        return categoryService.findAllByFilters(name, state);
+    }
+
+
     @PostMapping
     public CategorySavedDto create(@RequestBody CategoryBodyDto categoryBody) {
         return categoryService.create(categoryBody);
