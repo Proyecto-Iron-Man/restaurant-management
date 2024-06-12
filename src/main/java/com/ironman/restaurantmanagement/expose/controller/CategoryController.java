@@ -5,6 +5,7 @@ import com.ironman.restaurantmanagement.application.dto.category.CategoryDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySmallDto;
 import com.ironman.restaurantmanagement.application.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,12 +51,12 @@ public class CategoryController {
 
 
     @PostMapping
-    public CategorySavedDto create(@RequestBody CategoryBodyDto categoryBody) {
+    public CategorySavedDto create(@Valid @RequestBody CategoryBodyDto categoryBody) {
         return categoryService.create(categoryBody);
     }
 
     @PutMapping("/{id}")
-    public CategorySavedDto update(@PathVariable("id") Long id, @RequestBody CategoryBodyDto categoryBody) {
+    public CategorySavedDto update(@PathVariable("id") Long id, @Valid @RequestBody CategoryBodyDto categoryBody) {
         return categoryService.update(id, categoryBody);
     }
 
