@@ -5,6 +5,7 @@ import com.ironman.restaurantmanagement.application.dto.category.CategoryDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySmallDto;
 import com.ironman.restaurantmanagement.application.service.CategoryService;
+import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryDto findById(@PathVariable("id") Long id) {
+    public CategoryDto findById(@PathVariable("id") Long id) throws DataNotFoundException {
         return categoryService.findById(id);
     }
 
@@ -56,12 +57,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public CategorySavedDto update(@PathVariable("id") Long id, @Valid @RequestBody CategoryBodyDto categoryBody) {
+    public CategorySavedDto update(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody CategoryBodyDto categoryBody) throws DataNotFoundException {
         return categoryService.update(id, categoryBody);
     }
 
     @DeleteMapping("/{id}")
-    public CategorySavedDto disable(@PathVariable("id") Long id) {
+    public CategorySavedDto disable(@PathVariable("id") Long id) throws DataNotFoundException {
         return categoryService.disable(id);
     }
 
