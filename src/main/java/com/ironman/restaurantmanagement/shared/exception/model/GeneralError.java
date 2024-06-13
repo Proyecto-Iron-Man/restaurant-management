@@ -8,8 +8,8 @@ import lombok.Setter;
 // Lombok annotations
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class GeneralError {
     private String message;
 }

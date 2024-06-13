@@ -5,19 +5,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-/*
-CREATE TABLE public."tables" (
-	id serial4 NOT NULL,
-	name varchar(200) NOT NULL,
-	description varchar(1000) NULL,
-	state bpchar(1) DEFAULT 'A'::bpchar NOT NULL,
-	created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at timestamp NULL,
-	CONSTRAINT tables_name_uq UNIQUE (name),
-	CONSTRAINT tables_pk PRIMARY KEY (id)
-);
-* */
-
 // Lombok annotations
 @Getter
 @Setter

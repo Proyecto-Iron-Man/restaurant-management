@@ -10,8 +10,8 @@ import java.util.Map;
 // Lombok annotations
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ArgumentNotValidError {
     private String message;
     private Map<String, String> error;

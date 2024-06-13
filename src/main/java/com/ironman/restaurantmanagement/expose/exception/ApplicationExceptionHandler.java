@@ -29,17 +29,17 @@ public class ApplicationExceptionHandler {
                 .forEach(fieldError -> {
                     error.put(fieldError.getField(), fieldError.getDefaultMessage());
                 });
+
         response.setMessage("Invalid argument");
         response.setError(error);
 
         // Result
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(response);
-
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<GeneralError> handleNotFoundException(DataNotFoundException exception) {
+    public ResponseEntity<GeneralError> handleNotFound(DataNotFoundException exception) {
         // Variables
         GeneralError response = new GeneralError();
 
