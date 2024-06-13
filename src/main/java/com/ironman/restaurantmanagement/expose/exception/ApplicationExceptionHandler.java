@@ -39,7 +39,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<GeneralError> handleNotFound(DataNotFoundException exception) {
+    public ResponseEntity<GeneralError> handleDataNotFound(DataNotFoundException exception) {
         // Variables
         GeneralError response = new GeneralError();
 
