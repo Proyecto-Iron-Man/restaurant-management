@@ -8,12 +8,14 @@ import com.ironman.restaurantmanagement.application.mapper.TablaMapper;
 import com.ironman.restaurantmanagement.application.service.TablaService;
 import com.ironman.restaurantmanagement.presistence.entity.Tabla;
 import com.ironman.restaurantmanagement.presistence.repository.TablaRepository;
+import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 //Lombok annotations
 @RequiredArgsConstructor
@@ -35,11 +37,12 @@ public class TablaServiceImpl implements TablaService {
     }
 
     @Override
-    public TablaDto findById(Long id) {
+    public TablaDto findById(Long id) throws DataNotFoundException {
         return tablaRepository.findById(id)
                 .map(tablaMapper::toDto)
-                .orElse(null);
+                .orElseThrow(() -> tablaDataNotFoundException(id));
     }
+
 
     @Override
     public TablaSaveDto create(TablaBodyDto tablaBodyDto) {
@@ -51,8 +54,9 @@ public class TablaServiceImpl implements TablaService {
     }
 
     @Override
-    public TablaSaveDto update(Long id, TablaBodyDto tablaBodyDto) {
-        Tabla tabla = tablaRepository.findById(id).get();
+    public TablaSaveDto update(Long id, TablaBodyDto tablaBodyDto) throws DataNotFoundException {
+        Tabla tabla = tablaRepository.findById(id)
+                .orElseThrow(() -> tablaDataNotFoundException(id));
 
         tablaMapper.updateEntity(tabla, tablaBodyDto);
         tabla.setUpdatedAt(LocalDateTime.now());
@@ -61,8 +65,9 @@ public class TablaServiceImpl implements TablaService {
     }
 
     @Override
-    public TablaSaveDto disable(Long id) {
-        Tabla tabla = tablaRepository.findById(id).get();
+    public TablaSaveDto disable(Long id) throws DataNotFoundException {
+        Tabla tabla = tablaRepository.findById(id)
+                .orElseThrow(() -> tablaDataNotFoundException(id));
         tabla.setState(State.DISABLED.getValue());
 
         return tablaMapper.toSaveDto(tablaRepository.save(tabla));
@@ -92,5 +97,14 @@ public class TablaServiceImpl implements TablaService {
                 .stream()
                 .map(tablaMapper::toSmallDto)
                 .toList();
+    }
+
+
+//    private static Supplier<DataNotFoundException> tablaDataNotFoundExceptionSupplier(Long id) {
+//        return () -> new DataNotFoundException(" Tabla not found width id: " + id);
+//    }
+
+    private DataNotFoundException tablaDataNotFoundException(Long id) {
+        return new DataNotFoundException(" Tabla not found width id: " + id);
     }
 }

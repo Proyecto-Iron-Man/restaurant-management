@@ -5,6 +5,7 @@ import com.ironman.restaurantmanagement.application.dto.tabla.TablaDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSaveDto;
 import com.ironman.restaurantmanagement.application.dto.tabla.TablaSmallDto;
 import com.ironman.restaurantmanagement.application.service.TablaService;
+import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class TableController {
 
     @Operation(summary = "Mostrar las tablas por el id")
     @GetMapping("/{id}")
-    public TablaDto findById(@PathVariable Long id) {
+    public TablaDto findById(@PathVariable Long id) throws DataNotFoundException {
         return tablaService.findById(id);
     }
 
@@ -51,7 +52,7 @@ public class TableController {
     @Operation(summary = "Mostar las tablas por los filtros de nombre y estado")
     @GetMapping("/filters")
     public List<TablaSmallDto> findAllFilters(@RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "state", required = false) String state) {
+                                              @RequestParam(value = "state", required = false) String state) {
         return tablaService.findAllByFilters(name, state);
     }
 
@@ -63,13 +64,13 @@ public class TableController {
 
     @Operation(summary = "Actualizar una tabla")
     @PutMapping("{id}")
-    public TablaSaveDto update(@PathVariable Long id, @Valid @RequestBody TablaBodyDto tablaBodyDto) {
+    public TablaSaveDto update(@PathVariable Long id, @Valid @RequestBody TablaBodyDto tablaBodyDto) throws DataNotFoundException {
         return tablaService.update(id, tablaBodyDto);
     }
 
     @Operation(summary = "Eliminar una tabla por el id")
     @DeleteMapping("/{id}")
-    public TablaSaveDto disable(@PathVariable Long id) {
+    public TablaSaveDto disable(@PathVariable Long id) throws DataNotFoundException {
         return tablaService.disable(id);
     }
 
