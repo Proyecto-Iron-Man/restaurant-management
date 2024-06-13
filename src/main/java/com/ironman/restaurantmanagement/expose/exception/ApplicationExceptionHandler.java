@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Spring Stereotype annotations (el IoC pueda escanear a los bean que tengan el Stereotype)
+// Spring stereotype annotation
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ArgumentNotValidError> handleInvalidArgument(MethodArgumentNotValidException exception) {
-
         // Variables
         ArgumentNotValidError response = new ArgumentNotValidError();
         Map<String, String> error = new HashMap<>();
@@ -41,7 +41,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<GeneralError> handleNotFoundException(DataNotFoundException exception) {
         // Variables
-        GeneralError response   = new GeneralError();
+        GeneralError response = new GeneralError();
 
         // Process
         response.setMessage(exception.getMessage());
@@ -49,6 +49,5 @@ public class ApplicationExceptionHandler {
         // Result
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(response);
-
     }
 }

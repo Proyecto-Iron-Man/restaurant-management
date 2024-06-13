@@ -1,7 +1,7 @@
 package com.ironman.restaurantmanagement.shared.exception;
 
-public class DataNotFoundException extends  Exception{
-    public DataNotFoundException (String name){
+public class DataNotFoundException extends Exception {
+    public DataNotFoundException(String name) {
         super(name);
     }
 }

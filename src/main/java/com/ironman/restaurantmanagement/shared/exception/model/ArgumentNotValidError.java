@@ -14,5 +14,5 @@ import java.util.Map;
 @NoArgsConstructor
 public class ArgumentNotValidError {
     private String message;
-    private Map<String,String> error;
+    private Map<String, String> error;
 }
