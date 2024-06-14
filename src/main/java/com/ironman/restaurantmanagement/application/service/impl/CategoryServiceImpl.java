@@ -8,12 +8,12 @@ import com.ironman.restaurantmanagement.presistence.enums.CategorySortField;
 import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
 import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import com.ironman.restaurantmanagement.shared.page.PageResponse;
+import com.ironman.restaurantmanagement.shared.page.PagingAndSortingBuilder;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ import static com.ironman.restaurantmanagement.shared.util.DateHelper.localDateT
 
 // Spring Stereotype annotation
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends PagingAndSortingBuilder implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
@@ -102,33 +102,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryDto> findAllPaginated(int page, int size) {
+    public PageResponse<CategoryDto> findAllPaginated(int page, int size) {
         // Variables
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         // Process
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
 
         // Result
-        return categoryPage.map(categoryMapper::toDto);
+        return buildPageResponse(categoryPage, categoryMapper::toDto);
     }
 
     @Override
     public PageResponse<CategoryDto> paginatedSearch(CategoryFilterDto filter) {
         // Variables
         String column = CategorySortField.getSqlColumn(filter.getSortField());
-
-        Sort.Direction direction = Sort.Direction
-                .fromOptionalString(filter.getSortOrder())
-                .orElse(Sort.Direction.DESC);
-
-        Sort sort = Sort.by(direction, column);
-
-        Pageable pageable = PageRequest.of(
-                filter.getPage() - 1,
-                filter.getSize(),
-                sort
-        );
+        Pageable pageable = buildPageable(filter, column);
 
         // Process
         Page<Category> categoryPage = categoryRepository.paginatedSearch(
@@ -140,21 +129,8 @@ public class CategoryServiceImpl implements CategoryService {
                 pageable
         );
 
-        List<CategoryDto> content = categoryPage.getContent()
-                .stream()
-                .map(categoryMapper::toDto)
-                .toList();
-
-
         // Result
-        return PageResponse.<CategoryDto>builder()
-                .content(content)
-                .number(categoryPage.getNumber() + 1)
-                .numberOfElements(categoryPage.getNumberOfElements())
-                .size(categoryPage.getSize())
-                .totalElements(categoryPage.getTotalElements())
-                .totalPages(categoryPage.getTotalPages())
-                .build();
+        return buildPageResponse(categoryPage, categoryMapper::toDto);
     }
 
     private DataNotFoundException categoryDataNotFoundException(Long id) {

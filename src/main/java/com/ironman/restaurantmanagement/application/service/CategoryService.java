@@ -24,7 +24,7 @@ public interface CategoryService {
 
     List<CategorySmallDto> findAllByFilters(String name, String state);
 
-    Page<CategoryDto> findAllPaginated(int page, int size);
+    PageResponse<CategoryDto> findAllPaginated(int page, int size);
 
     PageResponse<CategoryDto> paginatedSearch(CategoryFilterDto filter);
 }
