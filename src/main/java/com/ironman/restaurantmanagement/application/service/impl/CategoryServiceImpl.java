@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ironman.restaurantmanagement.shared.util.DateHelper.localDateToString;
+import static com.ironman.restaurantmanagement.shared.util.StringHelper.buildSlugsKeywords;
 
 // Lombok annotations
 @RequiredArgsConstructor
@@ -50,6 +51,7 @@ public class CategoryServiceImpl extends PagingAndSortingBuilder implements Cate
     @Override
     public CategorySavedDto create(CategoryBodyDto categoryBody) {
         Category category = categoryMapper.toEntity(categoryBody);
+        category.setUrlKey(buildSlugsKeywords(category.getName()));
         category.setState(State.ENABLED.getValue());
         category.setCreatedAt(LocalDateTime.now());
 
@@ -62,6 +64,7 @@ public class CategoryServiceImpl extends PagingAndSortingBuilder implements Cate
                 .orElseThrow(() -> categoryDataNotFoundException(id));
 
         categoryMapper.updateEntity(category, categoryBody);
+        category.setUrlKey(buildSlugsKeywords(category.getName()));
         category.setUpdatedAt(LocalDateTime.now());
 
         return categoryMapper.toSavedDto(categoryRepository.save(category));
