@@ -1,28 +1,31 @@
 package com.ironman.restaurantmanagement.application.service.impl;
 
-import com.ironman.restaurantmanagement.application.dto.product.ProductBodyDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductSavedDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductSmallDto;
+import com.ironman.restaurantmanagement.application.dto.product.*;
 import com.ironman.restaurantmanagement.application.mapper.ProductMapper;
 import com.ironman.restaurantmanagement.application.service.ProductService;
 import com.ironman.restaurantmanagement.presistence.entity.Product;
+import com.ironman.restaurantmanagement.presistence.enums.ProductSortField;
 import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
 import com.ironman.restaurantmanagement.presistence.repository.ProductRepository;
 import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
+import com.ironman.restaurantmanagement.shared.page.PageResponse;
+import com.ironman.restaurantmanagement.shared.page.PagingAndSortingBuilder;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ironman.restaurantmanagement.shared.util.DateHelper.localDateToString;
 
 // Lombok annotations
 @RequiredArgsConstructor
 
 // Spring Stereotype annotation
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends PagingAndSortingBuilder implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
@@ -77,6 +80,28 @@ public class ProductServiceImpl implements ProductService {
         product.setState(State.DISABLED.getValue());
 
         return productMapper.toSavedDto(productRepository.save(product));
+    }
+
+    @Override
+    public PageResponse<ProductDto> paginatedSearch(ProductFilterDto filter) {
+        // Variables
+        String sortColumn = ProductSortField.getSqlColumn(filter.getSortField());
+        Pageable pageable = buildPageable(filter, sortColumn);
+
+        // Process
+        var pageProduct = productRepository.paginatedSearch(
+                filter.getName(),
+                filter.getDescription(),
+                filter.getCategoryId(),
+                filter.getStock(),
+                filter.getState(),
+                localDateToString(filter.getCreatedAtFrom()),
+                localDateToString(filter.getCreatedAtTo()),
+                pageable
+        );
+
+        // Result
+        return buildPageResponse(pageProduct, productMapper::toDto);
     }
 
     private DataNotFoundException productDataNotFoundException(Long id) {

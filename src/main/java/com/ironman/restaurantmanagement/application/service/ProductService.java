@@ -1,10 +1,8 @@
 package com.ironman.restaurantmanagement.application.service;
 
-import com.ironman.restaurantmanagement.application.dto.product.ProductBodyDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductSavedDto;
-import com.ironman.restaurantmanagement.application.dto.product.ProductSmallDto;
+import com.ironman.restaurantmanagement.application.dto.product.*;
 import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
+import com.ironman.restaurantmanagement.shared.page.PageResponse;
 
 import java.util.List;
 
@@ -20,4 +18,5 @@ public interface ProductService {
 
     ProductSavedDto disable(Long id) throws DataNotFoundException;
 
+    PageResponse<ProductDto> paginatedSearch(ProductFilterDto filter);
 }
