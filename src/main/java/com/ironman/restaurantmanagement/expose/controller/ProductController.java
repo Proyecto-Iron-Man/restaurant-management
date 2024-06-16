@@ -65,8 +65,16 @@ public class ProductController {
                     schema = @Schema(implementation = ArgumentNotValidError.class)
             )
     )
+    @ApiResponse(
+            responseCode = StatusCode.NOT_FOUND,
+            description = "Category not found",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = GeneralError.class)
+            )
+    )
     @PostMapping
-    public ResponseEntity<ProductSavedDto> create(@Valid @RequestBody ProductBodyDto productBody) {
+    public ResponseEntity<ProductSavedDto> create(@Valid @RequestBody ProductBodyDto productBody) throws DataNotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(productService.create(productBody));
     }
@@ -75,7 +83,7 @@ public class ProductController {
     @ApiResponse(responseCode = StatusCode.OK, description = "Product updated")
     @ApiResponse(
             responseCode = StatusCode.NOT_FOUND,
-            description = "Product not found",
+            description = "Product or Category not found",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = GeneralError.class)

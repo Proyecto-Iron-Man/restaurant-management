@@ -7,6 +7,7 @@ import com.ironman.restaurantmanagement.application.dto.product.ProductSmallDto;
 import com.ironman.restaurantmanagement.application.mapper.ProductMapper;
 import com.ironman.restaurantmanagement.application.service.ProductService;
 import com.ironman.restaurantmanagement.presistence.entity.Product;
+import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
 import com.ironman.restaurantmanagement.presistence.repository.ProductRepository;
 import com.ironman.restaurantmanagement.shared.exception.DataNotFoundException;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
@@ -24,6 +25,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<ProductSmallDto> findAll() {
@@ -41,7 +43,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductSavedDto create(ProductBodyDto productBody) {
+    public ProductSavedDto create(ProductBodyDto productBody) throws DataNotFoundException {
+        // Check if category exists
+        categoryRepository.findById(productBody.getCategoryId())
+                .orElseThrow(() -> categoryDataNotFoundException(productBody));
+
         Product product = productMapper.toEntity(productBody);
         product.setState(State.ENABLED.getValue());
         product.setCreatedAt(LocalDateTime.now());
@@ -53,6 +59,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductSavedDto update(Long id, ProductBodyDto productBody) throws DataNotFoundException {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> productDataNotFoundException(id));
+
+        // Check if category exists
+        categoryRepository.findById(productBody.getCategoryId())
+                .orElseThrow(() -> categoryDataNotFoundException(productBody));
 
         productMapper.updateEntity(product, productBody);
 
@@ -71,5 +81,9 @@ public class ProductServiceImpl implements ProductService {
 
     private DataNotFoundException productDataNotFoundException(Long id) {
         return new DataNotFoundException("Product not found with id: " + id);
+    }
+
+    private DataNotFoundException categoryDataNotFoundException(ProductBodyDto productBody) {
+        return new DataNotFoundException("Category not found with id: " + productBody.getCategoryId());
     }
 }

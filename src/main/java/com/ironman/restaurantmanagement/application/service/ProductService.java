@@ -14,7 +14,7 @@ public interface ProductService {
 
     ProductDto findById(Long id) throws DataNotFoundException;
 
-    ProductSavedDto create(ProductBodyDto productBody);
+    ProductSavedDto create(ProductBodyDto productBody) throws DataNotFoundException;
 
     ProductSavedDto update(Long id, ProductBodyDto productBody) throws DataNotFoundException;
 
