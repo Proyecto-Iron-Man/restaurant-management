@@ -8,6 +8,7 @@ import com.ironman.restaurantmanagement.shared.exception.model.GeneralError;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,7 @@ public class UserController {
     }
 
 
+    @SecurityRequirements(value = {})
     @ApiResponse(responseCode = StatusCode.CREATED, description = "User created")
     @ApiResponse(
             responseCode = StatusCode.BAD_REQUEST,

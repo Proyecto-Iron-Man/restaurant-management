@@ -18,6 +18,8 @@ public interface UserMapper {
 
     UserSavedDto toSavedDto(UserEntity user);
 
+    UserSecurityDto toSecurityDto(UserEntity user);
+
 
     UserEntity toEntity(UserCreateDto userCreate);
 

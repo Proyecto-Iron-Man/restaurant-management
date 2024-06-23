@@ -16,4 +16,6 @@ public interface UserService {
     UserSavedDto update(Long id, UserUpdateDto userUpdate) throws DataNotFoundException;
 
     UserSavedDto disable(Long id) throws DataNotFoundException;
+
+    UserSecurityDto login(AuthDto auth) throws DataNotFoundException;
 }

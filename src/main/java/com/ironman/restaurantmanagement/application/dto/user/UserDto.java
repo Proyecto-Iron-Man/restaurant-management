@@ -1,14 +1,12 @@
 package com.ironman.restaurantmanagement.application.dto.user;
 
 import com.ironman.restaurantmanagement.application.dto.profile.ProfileSmallDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 // Lombok annotations
+@EqualsAndHashCode
 @Getter
 @Setter
 @AllArgsConstructor
