@@ -1,6 +1,6 @@
-package com.ironman.restaurantmanagement.application.dto.category;
+package com.ironman.restaurantmanagement.application.dto.documenttype;
 
-import com.ironman.restaurantmanagement.shared.state.enums.State;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,17 +8,19 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-// Lombok annotations
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
+public class DocumentTypeDto {
     private Long id;
     private String name;
     private String description;
-    private String urlKey;
-    private State state;
+    private String sunatCode;
+    private int size;
+    private int isSizeExact;
+    private int isNumeric;
+    private String state;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
