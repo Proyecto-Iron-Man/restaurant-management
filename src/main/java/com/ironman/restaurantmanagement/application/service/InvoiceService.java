@@ -10,4 +10,6 @@ public interface InvoiceService {
     InvoiceDto findById(Long id) throws DataNotFoundException;
 
     InvoiceSavedDto create(InvoiceBodyDto invoiceBody) throws DataNotFoundException;
+
+    InvoiceSavedDto update(Long id, InvoiceBodyDto invoiceBody) throws DataNotFoundException;
 }

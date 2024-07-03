@@ -65,4 +65,30 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(invoiceService.create(invoiceBody));
     }
+
+
+    @ApiResponse(responseCode = StatusCode.OK, description = "Invoice updated")
+    @ApiResponse(
+            responseCode = StatusCode.BAD_REQUEST,
+            description = "Invalid data",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ArgumentNotValidError.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = StatusCode.NOT_FOUND,
+            description = "Invoice not found",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = GeneralError.class)
+            )
+    )
+    @PutMapping("/{id}")
+    public ResponseEntity<InvoiceSavedDto> update(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody InvoiceBodyDto invoiceBody) throws DataNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(invoiceService.update(id, invoiceBody));
+    }
 }

@@ -1,10 +1,7 @@
 package com.ironman.restaurantmanagement.presistence.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 
 // JPA annotations
 @Entity
@@ -41,7 +39,7 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<InvoiceDetail> invoiceDetails;
 
     private String state;

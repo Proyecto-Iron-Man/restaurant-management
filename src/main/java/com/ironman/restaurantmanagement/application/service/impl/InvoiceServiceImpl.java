@@ -47,6 +47,24 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceMapper.toSavedDto(invoiceRepository.save(invoice));
     }
 
+    @Override
+    public InvoiceSavedDto update(Long id, InvoiceBodyDto invoiceBody) throws DataNotFoundException {
+
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> invoiceDataNotFoundException(id));
+
+        invoiceMapper.updateEntity(invoice, invoiceBody);
+
+        invoice.getInvoiceDetails().forEach(detail -> {
+            detail.setInvoice(invoice);
+            detail.getId().setInvoiceId(invoice.getId());
+            detail.setState(State.ENABLED.getValue());
+            detail.setCreatedAt(LocalDateTime.now());
+            detail.setUpdatedAt(LocalDateTime.now());
+        });
+
+        return invoiceMapper.toSavedDto(invoiceRepository.save(invoice));
+    }
 
 
     private DataNotFoundException invoiceDataNotFoundException(Long id) {
