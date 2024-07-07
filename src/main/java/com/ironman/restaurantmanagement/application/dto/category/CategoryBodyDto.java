@@ -2,12 +2,10 @@ package com.ironman.restaurantmanagement.application.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 // Lombok annotations
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

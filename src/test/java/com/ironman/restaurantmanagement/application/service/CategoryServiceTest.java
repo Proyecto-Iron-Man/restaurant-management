@@ -1,6 +1,8 @@
 package com.ironman.restaurantmanagement.application.service;
 
+import com.ironman.restaurantmanagement.application.dto.category.CategoryBodyDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategoryDto;
+import com.ironman.restaurantmanagement.application.dto.category.CategorySavedDto;
 import com.ironman.restaurantmanagement.application.dto.category.CategorySmallDto;
 import com.ironman.restaurantmanagement.application.mapper.CategoryMapperImpl;
 import com.ironman.restaurantmanagement.application.service.impl.CategoryServiceImpl;
@@ -26,6 +28,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -107,6 +110,26 @@ class CategoryServiceTest {
         assertEquals(category.getDescription(), categoryFound.getDescription());
         assertEquals(category.getUrlKey(), categoryFound.getUrlKey());
         assertEquals(category.getState(), categoryFound.getState().getValue());
+    }
+
+    @Test
+    void create() {
+        // Given
+        when(categoryRepository.save(any(Category.class)))
+                .thenReturn(category);
+
+        CategoryBodyDto categoryBody = CategoryBodyDto.builder()
+                .name("Pizza")
+                .description("Pizza description")
+                .build();
+
+        // When
+        CategorySavedDto categorySaved = categoryService.create(categoryBody);
+
+        // Then
+        assertNotNull(categorySaved);
+        assertNotNull(categorySaved.getId());
+        assertEquals(category.getState(), categorySaved.getState().getValue());
     }
 
 }
