@@ -146,4 +146,52 @@ class CategoryServiceTest {
         assertEquals(categoryBody.getDescription(), capturedCategory.getDescription());
     }
 
+    @Test
+    void update() throws DataNotFoundException {
+        // Given
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(category));
+
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CategoryBodyDto categoryBody = CategoryBodyDto.builder()
+                .name("Pizza Mozarella")
+                .description("Pizza Gourmet")
+                .build();
+
+        // When
+        CategorySavedDto categorySaved = categoryService.update(id, categoryBody);
+
+        // Then
+        verify(categoryRepository).save(categoryArgumentCaptor.capture());
+        Category capturedCategory = categoryArgumentCaptor.getValue();
+
+        assertNotNull(categorySaved);
+        assertEquals(category.getId(), categorySaved.getId());
+        assertEquals(category.getState(), categorySaved.getState().getValue());
+
+        assertNotNull(capturedCategory);
+        assertEquals(categoryBody.getName(), capturedCategory.getName());
+        assertEquals(categoryBody.getDescription(), capturedCategory.getDescription());
+    }
+
+    @Test
+    void disable() throws DataNotFoundException {
+        // Given
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(category));
+
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        CategorySavedDto categorySaved = categoryService.disable(id);
+
+        // Then
+        assertNotNull(categorySaved);
+        assertEquals(category.getId(), categorySaved.getId());
+        assertEquals(State.DISABLED.getValue(), categorySaved.getState().getValue());
+    }
+
 }
