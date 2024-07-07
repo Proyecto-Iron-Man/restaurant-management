@@ -1,12 +1,10 @@
 package com.ironman.restaurantmanagement.application.dto.category;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 // Lombok annotations
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
