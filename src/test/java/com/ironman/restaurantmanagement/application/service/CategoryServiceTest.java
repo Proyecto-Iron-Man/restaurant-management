@@ -14,9 +14,7 @@ import com.ironman.restaurantmanagement.shared.state.mapper.StateMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.ReflectionUtils;
 
@@ -30,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +44,9 @@ class CategoryServiceTest {
 
     @InjectMocks
     private CategoryServiceImpl categoryService;
+
+    @Captor
+    private ArgumentCaptor<Category> categoryArgumentCaptor;
 
     Long id;
     Category category;
@@ -116,20 +118,32 @@ class CategoryServiceTest {
     void create() {
         // Given
         when(categoryRepository.save(any(Category.class)))
-                .thenReturn(category);
+                .thenAnswer(invocation -> {
+                    Category categoryCreated = invocation.getArgument(0);
+                    categoryCreated.setId(id);
+
+                    return categoryCreated;
+                });
 
         CategoryBodyDto categoryBody = CategoryBodyDto.builder()
-                .name("Pizza")
-                .description("Pizza description")
+                .name("Pizza Mozarella")
+                .description("Pizza Gourmet")
                 .build();
 
         // When
         CategorySavedDto categorySaved = categoryService.create(categoryBody);
 
         // Then
+        verify(categoryRepository).save(categoryArgumentCaptor.capture());
+        Category capturedCategory = categoryArgumentCaptor.getValue();
+
         assertNotNull(categorySaved);
         assertNotNull(categorySaved.getId());
         assertEquals(category.getState(), categorySaved.getState().getValue());
+
+        assertNotNull(capturedCategory);
+        assertEquals(categoryBody.getName(), capturedCategory.getName());
+        assertEquals(categoryBody.getDescription(), capturedCategory.getDescription());
     }
 
 }
