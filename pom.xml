@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
+		<org.jacoco.version>0.8.12</org.jacoco.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,6 +87,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>${org.jacoco.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -101,6 +108,33 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${org.jacoco.version}</version>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<excludes>
+						<exclude>**/RestaurantManagementApplication.**</exclude>
+					</excludes>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
