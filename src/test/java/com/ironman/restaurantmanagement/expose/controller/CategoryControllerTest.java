@@ -1,5 +1,7 @@
 package com.ironman.restaurantmanagement.expose.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironman.restaurantmanagement.application.dto.category.CategoryBodyDto;
 import com.ironman.restaurantmanagement.presistence.entity.Category;
 import com.ironman.restaurantmanagement.presistence.repository.CategoryRepository;
 import com.ironman.restaurantmanagement.shared.state.enums.State;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,6 +36,9 @@ class CategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private CategoryRepository categoryRepository;
@@ -83,8 +90,6 @@ class CategoryControllerTest {
 
     }
 
-
-
     @Test
     void canFindCategoryById() throws Exception {
         // Given
@@ -110,6 +115,94 @@ class CategoryControllerTest {
                 .andExpect(jsonPath("$.state.enabled").value(State.ENABLED.isEnabled()))
                 .andExpect(jsonPath("$.createdAt").exists());
 
+    }
+
+    @Test
+    void canCreateCategory() throws Exception {
+        // Given
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> {
+                    Category categoryCreated = invocation.getArgument(0);
+                    categoryCreated.setId(100L);
+                    return categoryCreated;
+                });
+
+        CategoryBodyDto categoryBody = CategoryBodyDto.builder()
+                .name("Pizza Mozarella")
+                .description("Pizza Gourmet")
+                .build();
+
+        // When
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(categoryBody));
+
+        ResultActions result = mockMvc.perform(request);
+
+        // Then
+        result.andExpect(status().isCreated())
+                .andDo(print())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.state.value").value(State.ENABLED.getValue()))
+                .andExpect(jsonPath("$.state.name").value(State.ENABLED.getName()))
+                .andExpect(jsonPath("$.state.enabled").value(State.ENABLED.isEnabled()));
+
+    }
+
+    @Test
+    void canUpdateCategory() throws  Exception {
+        // Given
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(category));
+
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CategoryBodyDto categoryBody = CategoryBodyDto.builder()
+                .name("Pizza Mozarella")
+                .description("Pizza Gourmet")
+                .build();
+
+        // When
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/categories/"+ id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(categoryBody));
+
+        ResultActions result = mockMvc.perform(request);
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.state.value").value(State.ENABLED.getValue()))
+                .andExpect(jsonPath("$.state.name").value(State.ENABLED.getName()))
+                .andExpect(jsonPath("$.state.enabled").value(State.ENABLED.isEnabled()));
+    }
+
+    @Test
+    void canDisableCategory() throws Exception {
+        // Given
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(category));
+
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete("/categories/"+ id);
+
+        ResultActions result = mockMvc.perform(request);
+
+        // Then
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.state.value").value(State.DISABLED.getValue()))
+                .andExpect(jsonPath("$.state.name").value(State.DISABLED.getName()))
+                .andExpect(jsonPath("$.state.enabled").value(State.DISABLED.isEnabled()));
     }
 
 }
